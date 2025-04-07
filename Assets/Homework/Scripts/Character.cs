@@ -16,10 +16,18 @@ public class Character : MonoBehaviour
 
     [SerializeField] private float _speed;
     [SerializeField] private int _health;
+
     
+
+    private Backpack _backpack;
+
+    public int Health { get => _health; set => _health = value; }
+    public float Speed { get => _speed; set => _speed = value; }
+
     private void Awake()
     { 
         _characterController = GetComponent<CharacterController>();
+        _backpack = GetComponent<Backpack>();
     }
 
     // Update is called once per frame
@@ -31,7 +39,13 @@ public class Character : MonoBehaviour
     private void HandleInput()
     {
         Vector3 input = new Vector3(Input.GetAxisRaw(HorizontalAxis), 0, Input.GetAxisRaw(VerticalAxis));
-
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (_backpack.Potion != null)
+                _backpack.Potion.Use();
+            else
+                Debug.Log("В рюкзаке нет предметов");
+        }
         if (input.magnitude <= StopZone)
             return;
 
@@ -44,4 +58,16 @@ public class Character : MonoBehaviour
     {
         _characterController.Move(direction * _speed * Time.deltaTime);
     }
+
+    public void TakePotion(Potion potion)
+    {
+        if (_backpack != null && _backpack.Potion == null)
+        {
+            _backpack.Potion = potion;
+            potion.gameObject.transform.SetParent(transform, true);
+            potion.transform.localPosition = Vector3.zero;
+            potion.HideMyMesh();
+        }
+    }
+
 }

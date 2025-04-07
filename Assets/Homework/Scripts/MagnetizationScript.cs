@@ -7,12 +7,20 @@ public class MagnetizationScript : MonoBehaviour
     [SerializeField] private float _magnetizationForce;
 
     private bool _isMagnitized = false;
+    private bool _isPotion;
 
     private Transform _transformWhichNeedMagnitize;
 
+    private float TakeDistance = 1f;
+
+    private void Awake()
+    {
+        _isPotion = GetComponent<Potion>();
+    }
+
     private void Update()
     {
-        if (_isMagnitized)
+        if (_isMagnitized && _isPotion)
             Magnetize();
         else
             Demagnitize();
@@ -22,9 +30,31 @@ public class MagnetizationScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Character character = other.GetComponent<Character>();
-        //BackpackScript backpack = other.GetComponent<BackpackScript>();
+        Backpack backpack = other.GetComponent<Backpack>();
 
-        if (character != null /*&&/* backpack.Potion == null*/)
+        if (character != null && backpack.Potion == null)
+        {
+            _isMagnitized = true;
+            _transformWhichNeedMagnitize = character.transform;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Character character = other.GetComponent<Character>();
+        Backpack backpack = other.GetComponent<Backpack>();
+
+        if(character != null && GetDirectionTo(character.transform.position).magnitude <= TakeDistance)
+        {
+            character.TakePotion(this.GetComponent<Potion>());
+            Debug.Log("Take");
+        }
+
+        if(backpack.Potion != null)
+        {
+            _isMagnitized = false;
+        }
+        else
         {
             _isMagnitized = true;
             _transformWhichNeedMagnitize = character.transform;
@@ -37,7 +67,6 @@ public class MagnetizationScript : MonoBehaviour
 
         if (character != null)
         {
-            _transformWhichNeedMagnitize = null;
             _isMagnitized = false;
         }
     }
@@ -49,17 +78,12 @@ public class MagnetizationScript : MonoBehaviour
             Vector3 direction = GetDirectionTo(_transformWhichNeedMagnitize.position);
             Vector3 normalizedDirection = direction.normalized;
             gameObject.transform.Translate(normalizedDirection * _magnetizationForce * Time.deltaTime, Space.World);
-            Debug.Log("Magnitize");
         }
-        
     }
 
     private void Demagnitize()
     {
-        if(gameObject.transform.parent != null)
-        {
-            gameObject.transform.SetParent(null);
-        }
+        _transformWhichNeedMagnitize = null;
     }
 
     private Vector3 GetDirectionTo(Vector3 to)

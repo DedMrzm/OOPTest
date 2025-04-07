@@ -17,8 +17,9 @@ public class Spawner : MonoBehaviour
         foreach (SpawnPoint spawnPoint in _spawnPoints)
         {
             spawnPoint.Potion = GetRandomPotion();
+            Instantiate(spawnPoint.Potion.gameObject, spawnPoint.transform.position, Quaternion.identity, spawnPoint.transform);
         }
     }
 
-    private Potion GetRandomPotion() => _potions[Random.Range(0, _potions.Count - 1)];
+    private Potion GetRandomPotion() => _potions[Random.Range(0, _potions.Count)];
 }

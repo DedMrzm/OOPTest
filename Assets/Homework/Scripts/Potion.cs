@@ -7,8 +7,6 @@ public abstract class Potion : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _particleSystem;
 
-    
-
     private void Update()
     {
         
@@ -16,8 +14,15 @@ public abstract class Potion : MonoBehaviour
 
     public virtual void Use()
     {
-        _particleSystem.Play();
-        Destroy(this);
+        if (!_particleSystem.isPlaying)
+        {
+            _particleSystem.Play();
+            Debug.Log("Use");
+            Destroy(gameObject, _particleSystem.main.duration);
+        }
     }
+
+    public void HideMyMesh()
+        => GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
 
 }

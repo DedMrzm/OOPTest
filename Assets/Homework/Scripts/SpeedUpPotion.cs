@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedUpPotion : MonoBehaviour
+public class SpeedUpPotion : Potion
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float _speedUpPower = 2;
 
-    // Update is called once per frame
-    void Update()
+    private Character _character;
+    public override void Use()
     {
-        
+        _character = GetComponent<Character>();
+
+        _character.Speed += _speedUpPower;
+
+        base.Use();
     }
 }
