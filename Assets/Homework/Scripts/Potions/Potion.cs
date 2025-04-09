@@ -7,17 +7,11 @@ public abstract class Potion : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _particleSystem;
 
-    private void Update()
-    {
-        
-    }
-
     public virtual void Use()
     {
         if (!_particleSystem.isPlaying)
         {
             _particleSystem.Play();
-            Debug.Log("Use");
             Destroy(gameObject, _particleSystem.main.duration);
         }
     }

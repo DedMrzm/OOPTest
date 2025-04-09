@@ -14,15 +14,12 @@ public class Character : MonoBehaviour
 
     private CharacterController _characterController;
 
-    [SerializeField] private float _speed;
-    [SerializeField] private int _health;
+    public float Speed;
+    public int Health;
 
-    
+    public Vector3 ViewingDirection { get; private set; }
 
     private Backpack _backpack;
-
-    public int Health { get => _health; set => _health = value; }
-    public float Speed { get => _speed; set => _speed = value; }
 
     private void Awake()
     { 
@@ -33,12 +30,14 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //Debug.Log("Viewing Direction: " + ViewingDirection);
         HandleInput();
     }
 
     private void HandleInput()
     {
         Vector3 input = new Vector3(Input.GetAxisRaw(HorizontalAxis), 0, Input.GetAxisRaw(VerticalAxis));
+
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (_backpack.Potion != null)
@@ -51,12 +50,14 @@ public class Character : MonoBehaviour
 
         Vector3 normalizedInput = input.normalized;
 
+        ViewingDirection = normalizedInput;
+
         HandleMoveTo(normalizedInput);
     }
 
     private void HandleMoveTo(Vector3 direction)
     {
-        _characterController.Move(direction * _speed * Time.deltaTime);
+        _characterController.Move(direction * Speed * Time.deltaTime);
     }
 
     public void TakePotion(Potion potion)
@@ -66,6 +67,7 @@ public class Character : MonoBehaviour
             _backpack.Potion = potion;
             potion.gameObject.transform.SetParent(transform, true);
             potion.transform.localPosition = Vector3.zero;
+
             potion.HideMyMesh();
         }
     }

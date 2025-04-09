@@ -47,7 +47,6 @@ public class MagnetizationScript : MonoBehaviour
         if(character != null && GetDirectionTo(character.transform.position).magnitude <= TakeDistance)
         {
             character.TakePotion(this.GetComponent<Potion>());
-            Debug.Log("Take");
         }
 
         if(backpack.Potion != null)
