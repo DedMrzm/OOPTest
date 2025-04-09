@@ -7,8 +7,4 @@ public class SpawnPoint : MonoBehaviour
 {
     [NonSerialized] public Potion Potion;
     public bool IsEmpty => Potion == null;
-
-    private void Awake()
-    {
-    }
 }
