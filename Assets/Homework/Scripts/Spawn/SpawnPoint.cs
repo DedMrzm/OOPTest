@@ -5,6 +5,6 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    [NonSerialized] public Potion Potion;
+    [NonSerialized] public Item Potion;
     public bool IsEmpty => Potion == null;
 }

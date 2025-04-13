@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private List<Potion> _potions;
+    [SerializeField] private List<Item> _potions;
     [SerializeField] private List<SpawnPoint> _spawnPoints;
 
     private void Awake()
@@ -21,5 +21,5 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private Potion GetRandomPotion() => _potions[Random.Range(0, _potions.Count)];
+    private Item GetRandomPotion() => _potions[Random.Range(0, _potions.Count)];
 }
